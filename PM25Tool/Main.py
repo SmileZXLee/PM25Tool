@@ -20,21 +20,24 @@ os_is_windows = platform.system() == 'Windows'
 all_req_data = ['aqi','pm2_5','pm10','so2','no2','co','o3']
 #程序入口
 def main():
-	print(u'欢迎使用PM25Tool!')
+	print(u'欢迎使用PM25Tool-By照相')
 	while (True):
 		citys = get_citys()['citys'].split('#')
 		print(u'任务开始！')
 		for city in citys:
+			city = city.strip()
 			res = HttpReq.send_req('http://www.pm25.com/city/mon/aqi/%s.html'%(city),{},'','','GET')
 			match_group = Regular.get_city_area(res)
 			area_count = len(match_group) - 1
 			if area_count == 0:
 				print(u'未获取到[%s]的地区信息，自动跳过!'%city)
 				continue
+			if city in match_group:
+				area_count = area_count - 1
 			print(u'%s共%d个地区，开始获取数据...'%(city,area_count))
 			w = Workbook()
 			for area in match_group:
-				if area != u'返回':
+				if area != u'返回' and area != city:
 					print(u'开始获取[%s]的各项信息...'%area)
 					ws = w.add_sheet(area)
 					colData = []
@@ -53,7 +56,9 @@ def main():
 								series = aqi_json['series']
 
 							for day in xdata:
-								day = re.findall('\d+',day)[0].encode('utf-8')
+								days = re.findall('\d+',day)
+								if(len(days) > 0):
+									day = days[0].encode('utf-8')
 								new_xdata.append(day)
 							new_xdata.insert(0,'')
 							if(interface == 'aqi'):
@@ -95,7 +100,8 @@ def add_to_excel(ws,area,colData):
 	cur_day_time = time.strftime('%d',cur_time)
 	index = 0
 	title_col = colData[0]
-	if(len(colData) > 1):
+	day_seg = 0
+	if(len(colData) > 1) and cur_day_time in title_col:
 		day_seg = title_col.index(cur_day_time)
 	for col in colData:
 		subIndex = 0
@@ -105,7 +111,7 @@ def add_to_excel(ws,area,colData):
 					subCol = cur_for_mon_time + '/' + subCol
 				else:
 					subCol = cur_mon_time + '/' + subCol
-			ws.write(subIndex,index,str(subCol))
+			ws.write(subIndex,index,subCol)
 			subIndex = subIndex+1
 		index = index+1
 def creat_path(path):

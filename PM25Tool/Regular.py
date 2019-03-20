@@ -1,5 +1,6 @@
 #coding=utf-8
 __author__ = 'zxlee'
+__github__ = 'https://github.com/SmileZXLee/PM25Tool'
 import json
 import re
 
