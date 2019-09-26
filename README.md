@@ -11,7 +11,10 @@ pip install request
 pip install demjson
 ```
 ```
-pip install pyExcelerator
+pip install xlwt
+```
+```
+pip install python-dateutil
 ```
 ```
 pip install python-dateutil
