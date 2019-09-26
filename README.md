@@ -14,7 +14,7 @@ pip install demjson
 pip install xlwt
 ```
 ```
-pip install python-dateutil
+pip install pyExcelerator
 ```
 ```
 pip install python-dateutil
