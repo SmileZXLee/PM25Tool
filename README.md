@@ -13,6 +13,9 @@ pip install demjson
 ```
 pip install pyExcelerator
 ```
+```
+pip install python-dateutil
+```
 #### cd到项目文件夹下执行python Main.py
 ***
 ### 效果图
